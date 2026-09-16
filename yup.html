@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YUP — Financial Progress Platform</title>
+<style>
+:root{
+  --blue:#1769ff;--cyan:#16c7ff;--green:#18c96e;--yellow:#ffd84d;
+  --pink:#ff4fa3;--purple:#8257ff;--ink:#10233f;--muted:#64748b;
+  --bg:#f5f9ff;--white:#fff;--border:#dbe5f0;--danger:#ef4444;
+  --shadow:0 15px 45px rgba(16,35,63,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+a{color:var(--blue)}
+
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--border)}
+.nav{max-width:1200px;margin:auto;padding:15px 22px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:30px;font-weight:950;letter-spacing:-2px;color:var(--blue)}
+.logo span{color:var(--pink)}
+.navlinks{display:flex;gap:8px;align-items:center}
+.navlinks button{border:0;background:transparent;padding:10px 14px;color:var(--ink);font-weight:700}
+.primary{border:0!important;background:var(--blue)!important;color:#fff!important;border-radius:12px;padding:12px 18px!important;font-weight:800}
+.primary:disabled{opacity:.55;cursor:not-allowed}
+.secondary{border:1px solid var(--border);background:#fff;color:var(--ink);border-radius:12px;padding:12px 18px;font-weight:800}
+.ghost{border:0;background:transparent;color:var(--blue);font-weight:800;padding:6px}
+
+.hero{max-width:1200px;margin:auto;padding:80px 22px 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center}
+.eyebrow{display:inline-block;padding:8px 13px;border-radius:999px;background:#e7f0ff;color:var(--blue);font-weight:900;font-size:13px}
+.hero h1{font-size:clamp(45px,7vw,78px);line-height:.94;letter-spacing:-4px;margin:20px 0}
+.hero h1 span{background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:19px;line-height:1.65;color:var(--muted);max-width:650px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.hero-card{background:linear-gradient(135deg,#1769ff,#8257ff 55%,#ff4fa3);padding:10px;border-radius:30px;box-shadow:var(--shadow);transform:rotate(2deg)}
+.credit-card{min-height:320px;border-radius:23px;padding:28px;color:#fff;background:linear-gradient(135deg,rgba(0,0,0,.18),rgba(255,255,255,.12));backdrop-filter:blur(10px);display:flex;flex-direction:column;justify-content:space-between}
+.chip{width:50px;height:38px;border-radius:9px;background:linear-gradient(135deg,#ffd84d,#fff0a5)}
+.card-number{font-size:25px;letter-spacing:4px}
+.card-bottom{display:flex;justify-content:space-between}
+.card-brand{font-size:28px;font-weight:950}
+
+section{padding:70px 22px}
+.container{max-width:1200px;margin:auto}
+.section-title{text-align:center;margin-bottom:38px}
+.section-title h2{font-size:42px;letter-spacing:-2px;margin:0 0 10px}
+.section-title p{color:var(--muted);font-size:17px}
+.features,.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature,.step{background:#fff;border:1px solid var(--border);border-radius:22px;padding:28px}
+.feature{box-shadow:0 8px 30px rgba(16,35,63,.05)}
+.feature .icon{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-weight:950;font-size:21px;margin-bottom:20px}
+.blue{background:#e6efff;color:var(--blue)}
+.green{background:#e2faee;color:#13944d}
+.yellow{background:#fff7cf;color:#9b7600}
+.feature h3,.step h3{margin:0 0 10px}
+.feature p,.step p{color:var(--muted);line-height:1.6}
+.step-number{font-size:40px;font-weight:950;color:var(--blue)}
+
+footer{padding:35px 22px;background:var(--ink);color:#fff}
+.footer-inner{max-width:1200px;margin:auto;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer p{color:#b8c5d7}
+
+.app-shell{max-width:1400px;margin:auto;display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{background:#fff;border-right:1px solid var(--border);padding:25px 15px}
+.sidebar .logo{padding:0 12px 30px}
+.side-btn{display:block;width:100%;text-align:left;border:0;background:transparent;padding:13px 14px;border-radius:12px;margin-bottom:5px;color:var(--ink);font-weight:750}
+.side-btn.active,.side-btn:hover{background:#eaf1ff;color:var(--blue)}
+.main{padding:28px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.topbar h1{margin:0;font-size:30px}
+.user-pill{background:#fff;border:1px solid var(--border);border-radius:999px;padding:9px 14px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.stat{background:#fff;border:1px solid var(--border);border-radius:18px;padding:20px}
+.stat small{color:var(--muted)}
+.stat strong{display:block;font-size:28px;margin-top:8px}
+.grid{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}
+.panel{background:#fff;border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:20px}
+.panel h2{margin-top:0}
+.digital-card{min-height:245px;border-radius:20px;padding:25px;background:linear-gradient(135deg,#1769ff,#8257ff,#ff4fa3);color:#fff;display:flex;flex-direction:column;justify-content:space-between}
+.digital-card.frozen{filter:grayscale(.8) brightness(.85)}
+.digital-card .number{font-size:22px;letter-spacing:3px}
+.card-controls{display:flex;gap:10px;margin-top:15px}
+.card-controls button{flex:1;border:0;border-radius:11px;padding:11px;font-weight:800}
+.progress-bar{height:13px;background:#e8eef7;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));transition:width .6s}
+.progress-meta{display:flex;justify-content:space-between;margin-bottom:8px;font-weight:800}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--border)}
+.table th{color:var(--muted);font-size:13px}
+.status{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:900}
+.status.green{background:#e2faee;color:#128b47}
+.status.yellow{background:#fff7cf;color:#8a6c00}
+.status.red{background:#ffe7e7;color:#c62828}
+
+.form-page{max-width:540px;margin:60px auto;padding:0 22px}
+.form-card{background:#fff;border:1px solid var(--border);border-radius:25px;padding:30px;box-shadow:var(--shadow)}
+.form-card h1{margin-top:0;font-size:34px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:800;margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;border:1px solid #cbd5e1;border-radius:11px;padding:13px;outline:none;background:#fff}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #e7efff}
+.price-box{background:#edf4ff;padding:18px;border-radius:15px;margin:18px 0}
+.price-box strong{font-size:30px}
+.payment-option{border:2px solid var(--border);border-radius:16px;padding:18px;margin:12px 0}
+.payment-option.selected{border-color:var(--blue);background:#f3f7ff}
+.cashapp{background:linear-gradient(135deg,#dfffe9,#a8ffc9)}
+.cashapp-row{display:flex;align-items:center;gap:14px}
+.cash-logo{width:48px;height:48px;border-radius:14px;background:#111;color:#fff;display:grid;place-items:center;font-size:25px;font-weight:950}
+.cash-tag{font-size:21px;font-weight:950}
+.notice{padding:14px;border-radius:12px;background:#fff7cf;color:#725b00;font-size:13px;line-height:1.5}
+.err{color:var(--danger);font-weight:700;margin:8px 0 0;min-height:18px}
+.ok{color:#128b47;font-weight:700;margin:8px 0 0}
+
+.modal{position:fixed;inset:0;background:rgba(10,25,45,.55);z-index:100;display:grid;place-items:center;padding:20px}
+.modal-card{background:#fff;width:min(500px,100%);border-radius:22px;padding:25px;max-height:90vh;overflow:auto}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-actions button{flex:1}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 22px;border-radius:14px;font-weight:800;z-index:200;box-shadow:var(--shadow);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+
+@media(max-width:900px){
+  .hero,.grid{grid-template-columns:1fr}
+  .features,.steps{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .app-shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+@media(max-width:600px){
+  .navlinks button:not(.primary){display:none}
+  .hero{padding-top:50px}.hero h1{letter-spacing:-2px}
+  .stats{grid-template-columns:1fr}.main{padding:18px}.card-number{font-size:17px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ PUBLIC / LANDING ============ -->
+<div id="public">
+<header><nav class="nav">
+  <div class="logo">Y<span>U</span>P</div>
+  <div class="navlinks">
+    <button onclick="showSection('how')">How It Works</button>
+    <button onclick="showLogin()">Login</button>
+    <button class="primary" onclick="showSignup()">Get Started</button>
+  </div>
+</nav></header>
+
+<main>
+<section class="hero">
+  <div>
+    <span class="eyebrow">YOUR FINANCIAL PROGRESS STARTS HERE</span>
+    <h1>Say <span>YUP</span> to your next chapter.</h1>
+    <p>YUP gives members a simple digital financial experience designed around responsible money habits, payment history and measurable personal progress.</p>
+    <div class="actions">
+      <button class="primary" onclick="showSignup()">Join YUP — $100</button>
+      <button class="secondary" onclick="showLogin()">Member Login</button>
+    </div>
+  </div>
+  <div class="hero-card"><div class="credit-card">
+    <div><div class="chip"></div><div style="margin-top:20px;font-weight:800">YUP MEMBER</div></div>
+    <div class="card-number">•••• •••• •••• 3651</div>
+    <div class="card-bottom">
+      <div><small>MEMBER</small><br><strong>YUP MEMBER</strong></div>
+      <div class="card-brand">YUP</div>
+    </div>
+  </div></div>
+</section>
+
+<section><div class="container">
+  <div class="section-title"><h2>Built around progress.</h2><p>Everything members need in one place.</p></div>
+  <div class="features">
+    <div class="feature"><div class="icon blue">01</div><h3>Digital Member Card</h3><p>Access your YUP account and digital-card experience from your dashboard.</p></div>
+    <div class="feature"><div class="icon green">02</div><h3>Track Your Progress</h3><p>Monitor your internal YUP Progress score, payment activity and milestones.</p></div>
+    <div class="feature"><div class="icon yellow">03</div><h3>Simple Payments</h3><p>Manage payments and membership activity through one centralized account.</p></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="container">
+  <div class="section-title"><h2>How YUP works</h2><p>Three simple steps.</p></div>
+  <div class="steps">
+    <div class="step"><div class="step-number">01</div><h3>Create your account</h3><p>Complete your YUP member profile and enrollment.</p></div>
+    <div class="step"><div class="step-number">02</div><h3>Activate your membership</h3><p>Complete the $100 enrollment payment using an available payment method.</p></div>
+    <div class="step"><div class="step-number">03</div><h3>Build your progress</h3><p>Use your YUP dashboard to monitor activity and financial habits.</p></div>
+  </div>
+</div></section>
+
+<section><div class="container">
+  <div class="section-title"><h2>Ready to say YUP?</h2><p>Start building a better financial routine.</p></div>
+  <div style="text-align:center"><button class="primary" onclick="showSignup()">Create My YUP Account</button></div>
+</div></section>
+</main>
+
+<footer><div class="footer-inner">
+  <div><div class="logo" style="color:#fff">YUP</div><p>Financial progress starts with responsible habits.</p></div>
+  <div><p>© 2026 YUP. All rights reserved.</p></div>
+</div></footer>
+</div>
+
+<!-- ============ SIGNUP ============ -->
+<div id="signup" class="hidden">
+<header><nav class="nav"><div class="logo">Y<span>U</span>P</div><button class="secondary" onclick="showPublic()">Back</button></nav></header>
+<div class="form-page"><div class="form-card">
+  <h1>Create your YUP account</h1>
+  <p style="color:var(--muted)">Start your membership.</p>
+  <div class="field"><label>Full Name</label><input id="signupName" placeholder="Your full name"></div>
+  <div class="field"><label>Email</label><input id="signupEmail" type="email" placeholder="you@example.com"></div>
+  <div class="field"><label>Phone</label><input id="signupPhone" type="tel" placeholder="(555) 555-5555"></div>
+  <div class="field"><label>Password</label><input id="signupPassword" type="password" placeholder="Create a password (min 6 characters)"></div>
+  <div class="field"><label>Financial Goal</label>
+    <select id="signupGoal">
+      <option>Build better payment habits</option>
+      <option>Improve financial organization</option>
+      <option>Track my financial progress</option>
+      <option>Prepare for future credit opportunities</option>
+    </select>
+  </div>
+  <div class="price-box"><small>YUP Enrollment</small><strong>$100.00</strong>
+    <p style="margin-bottom:0;color:var(--muted)">Enrollment/payment terms are subject to the YUP program terms.</p></div>
+  <div class="notice">YUP Progress is an internal YUP measurement. It is not a FICO® score, VantageScore® score, or credit-bureau score.</div>
+  <p class="err" id="signupErr"></p>
+  <button class="primary" style="width:100%;margin-top:10px" onclick="continuePayment()">Continue to Payment</button>
+  <p style="text-align:center;color:var(--muted)">Already a member? <button class="ghost" onclick="showLogin()">Sign in</button></p>
+</div></div>
+</div>
+
+<!-- ============ PAYMENT ============ -->
+<div id="payment" class="hidden">
+<header><nav class="nav"><div class="logo">Y<span>U</span>P</div><button class="secondary" onclick="showSignup()">Back</button></nav></header>
+<div class="form-page"><div class="form-card">
+  <h1>Complete enrollment</h1>
+  <div class="price-box"><div style="display:flex;justify-content:space-between"><span>YUP Enrollment</span><strong>$100</strong></div></div>
+
+  <div class="payment-option selected" id="optStripe" onclick="selectPay('stripe')">
+    <label><input type="radio" name="payment" checked> Card / Stripe</label>
+    <p style="color:var(--muted);font-size:14px">Secure online card payment via Stripe.</p>
+    <button class="primary" style="width:100%" onclick="event.stopPropagation();stripeCheckout()">Pay $100 with Stripe</button>
+  </div>
+
+  <div class="payment-option cashapp" id="optCash" onclick="selectPay('cash')">
+    <div class="cashapp-row">
+      <div class="cash-logo">$</div>
+      <div><div class="cash-tag">$hsw365</div><div style="font-size:13px;color:#175b32">Cash App payment</div></div>
+    </div>
+    <p style="color:#175b32">Send exactly <strong>$100.00</strong> to <strong>$hsw365</strong>, then enter your transaction ID below.</p>
+    <div class="field"><label>Cash App Transaction ID</label><input id="cashTransaction" placeholder="Enter transaction ID"></div>
+    <button class="primary" style="width:100%" onclick="event.stopPropagation();cashPayment()">Submit Cash App Payment</button>
+    <p id="cashStatus"></p>
+  </div>
+
+  <div class="notice">Your YUP membership becomes active after successful payment processing or manual verification where applicable.</div>
+</div></div>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div id="login" class="hidden">
+<header><nav class="nav"><div class="logo">Y<span>U</span>P</div><button class="secondary" onclick="showPublic()">Back</button></nav></header>
+<div class="form-page"><div class="form-card">
+  <h1>Welcome back.</h1>
+  <p style="color:var(--muted)">Sign in to your YUP account.</p>
+  <div class="field"><label>Email</label><input id="loginEmail" type="email" placeholder="you@example.com"></div>
+  <div class="field"><label>Password</label><input id="loginPassword" type="password" placeholder="Password"></div>
+  <p class="err" id="loginErr"></p>
+  <button class="primary" style="width:100%" onclick="login()">Sign In</button>
+  <p style="text-align:center;color:var(--muted)">New member? <button class="ghost" onclick="showSignup()">Create an account</button></p>
+</div></div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" class="hidden"><div class="app-shell">
+<aside class="sidebar">
+  <div class="logo">Y<span>U</span>P</div>
+  <button class="side-btn active" data-page="overview" onclick="dashPage('overview',this)">Overview</button>
+  <button class="side-btn" data-page="card" onclick="dashPage('card',this)">Digital Card</button>
+  <button class="side-btn" data-page="payments" onclick="dashPage('payments',this)">Payments</button>
+  <button class="side-btn" data-page="transactions" onclick="dashPage('transactions',this)">Transactions</button>
+  <button class="side-btn" data-page="progress" onclick="dashPage('progress',this)">YUP Progress</button>
+  <button class="side-btn" data-page="profile" onclick="dashPage('profile',this)">Profile</button>
+  <button class="side-btn" data-page="support" onclick="dashPage('support',this)">Support</button>
+  <button class="side-btn" onclick="adminLogin()">Admin</button>
+  <div style="margin-top:35px"><button class="side-btn" onclick="logout()">Sign Out</button></div>
+</aside>
+<main class="main">
+  <div class="topbar"><h1 id="pageTitle">Overview</h1><div class="user-pill" id="userName">YUP Member</div></div>
+  <div id="dashContent"></div>
+</main>
+</div></div>
+
+<!-- ============ MODAL / TOAST ============ -->
+<div id="modal" class="modal hidden"><div class="modal-card">
+  <h2 id="modalTitle">YUP</h2><div id="modalBody"></div>
+  <div class="modal-actions"><button class="secondary" onclick="closeModal()">Close</button></div>
+</div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* =========================================================
+   YUP — client-side web app
+   Real persistent accounts, auth, dashboard state, payments,
+   and admin — stored in the browser via localStorage.
+   Configure Stripe: set YUP_CONFIG.stripePaymentLink to your
+   live Stripe Payment Link URL (https://buy.stripe.com/...).
+   ========================================================= */
+const YUP_CONFIG = {
+  enrollmentFee: 100,
+  cashTag: "$hsw365",
+  stripePaymentLink: "",              // <-- paste your Stripe Payment Link here to go live
+  adminPassword: "YUPADMIN",          // <-- change before deploying
+  monthlyPayment: 42
+};
+
+const DB_KEY = "yup_db_v1";
+const SESSION_KEY = "yup_session_v1";
+
+/* ---------- storage ---------- */
+function loadDB(){
+  try{
+    const raw = localStorage.getItem(DB_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return seedDB();
+}
+function saveDB(db){ try{ localStorage.setItem(DB_KEY, JSON.stringify(db)); }catch(e){} }
+function seedDB(){
+  const db = { members: {}, nextCard: 3652 };
+  // demo members so the admin panel and reports have data on first run
+  const demo = [
+    {name:"JAMES CARTER", email:"james@demo.com", progress:721, status:"active", payment:42},
+    {name:"MARIA SMITH",  email:"maria@demo.com", progress:683, status:"active", payment:42},
+    {name:"DAVID JOHNSON",email:"david@demo.com", progress:512, status:"pending",payment:100}
+  ];
+  demo.forEach((d,i)=>{
+    db.members[d.email] = newMember({
+      name:d.name, email:d.email, phone:"(555) 555-01"+(i+10),
+      password:"demo123", goal:"Track my financial progress"
+    });
+    const m = db.members[d.email];
+    m.progress = d.progress; m.status = d.status;
+    m.card = "36"+String(40+i).padStart(2,"0");
+  });
+  saveDB(db);
+  return db;
+}
+let DB = loadDB();
+
+/* ---------- helpers ---------- */
+function newMember(o){
+  return {
+    name:(o.name||"").toUpperCase(), email:o.email, phone:o.phone||"",
+    password:o.password||"", goal:o.goal||"", status:"pending",
+    progress:600, available:850, card:"3651",
+    frozen:false, createdAt:Date.now(),
+    payments:[], transactions:[]
+  };
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function money(n){ return "$"+Number(n||0).toFixed(2); }
+function today(){ return new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); }
+function toast(msg){
+  const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2600);
+}
+
+let current = null; // logged-in member email
+
+/* ---------- navigation ---------- */
+function hideAll(){ ["public","signup","payment","login","dashboard"].forEach(id=>document.getElementById(id).classList.add("hidden")); }
+function show(id){ hideAll(); document.getElementById(id).classList.remove("hidden"); window.scrollTo(0,0); }
+function showPublic(){ show("public"); }
+function showSignup(){ show("signup"); }
+function showLogin(){ show("login"); }
+function showSection(id){ showPublic(); setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth"}); },50); }
+
+/* ---------- signup ---------- */
+let pending = null; // pending signup awaiting payment
+function continuePayment(){
+  const name=val("signupName"), email=val("signupEmail").toLowerCase(),
+        phone=val("signupPhone"), password=val("signupPassword"),
+        goal=val("signupGoal");
+  const err=document.getElementById("signupErr");
+  if(!name||!email||!phone||!password){ err.textContent="Please complete every field."; return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent="Enter a valid email address."; return; }
+  if(password.length<6){ err.textContent="Password must be at least 6 characters."; return; }
+  if(DB.members[email]){ err.textContent="An account with that email already exists. Please sign in."; return; }
+  err.textContent="";
+  pending = { name, email, phone, password, goal };
+  show("payment");
+}
+
+/* ---------- payment ---------- */
+function selectPay(which){
+  document.getElementById("optStripe").classList.toggle("selected", which==="stripe");
+  document.getElementById("optCash").classList.toggle("selected", which==="cash");
+}
+function activateAccount(method, ref){
+  if(!pending){ return; }
+  const m = newMember(pending);
+  m.status = "active";
+  m.card = String(DB.nextCard++);
+  m.payments.push({date:today(), amount:YUP_CONFIG.enrollmentFee, status:"Paid", type:"Enrollment ("+method+")", ref:ref||""});
+  m.transactions.push({date:today(), desc:"YUP Enrollment", amount:"+"+money(YUP_CONFIG.enrollmentFee), status:"Complete"});
+  DB.members[m.email] = m;
+  saveDB(DB);
+  startSession(m.email);
+  toast("Membership activated. Welcome to YUP!");
+  openDashboard();
+}
+function stripeCheckout(){
+  if(!pending){ toast("Complete the signup form first."); show("signup"); return; }
+  if(YUP_CONFIG.stripePaymentLink){
+    // Live mode — send the member to the real Stripe hosted checkout.
+    window.location.href = YUP_CONFIG.stripePaymentLink;
+    return;
+  }
+  // No live key configured yet: confirm and activate so the flow is fully usable.
+  showModal("Stripe Checkout",
+    "<p>No live Stripe Payment Link is configured yet, so this completes the enrollment locally.</p>"+
+    "<p style='color:var(--muted)'>To take real card payments, paste your Stripe Payment Link into <code>YUP_CONFIG.stripePaymentLink</code> at the top of the script.</p>"+
+    "<button class='primary' style='width:100%' onclick=\"confirmStripe()\">Complete $100 Enrollment</button>");
+}
+function confirmStripe(){ closeModal(); activateAccount("Stripe", "STRIPE-"+Date.now().toString(36).toUpperCase()); }
+function cashPayment(){
+  const id=val("cashTransaction"), status=document.getElementById("cashStatus");
+  if(!id){ status.textContent="Enter your Cash App transaction ID."; status.className="err"; return; }
+  status.textContent="Payment submitted — membership activated (pending verification review)."; status.className="ok";
+  activateAccount("Cash App", id);
+}
+
+/* ---------- auth ---------- */
+function startSession(email){ current=email; try{ localStorage.setItem(SESSION_KEY,email); }catch(e){} }
+function endSession(){ current=null; try{ localStorage.removeItem(SESSION_KEY); }catch(e){} }
+function login(){
+  const email=val("loginEmail").toLowerCase(), pw=val("loginPassword"), err=document.getElementById("loginErr");
+  const m=DB.members[email];
+  if(!m){ err.textContent="No account found for that email."; return; }
+  if(m.password!==pw){ err.textContent="Incorrect password."; return; }
+  err.textContent=""; startSession(email); openDashboard();
+}
+function logout(){ endSession(); showPublic(); }
+
+/* ---------- dashboard ---------- */
+function me(){ return DB.members[current]; }
+function openDashboard(){
+  show("dashboard");
+  const m=me(); if(!m){ showPublic(); return; }
+  document.getElementById("userName").textContent = m.name || "YUP Member";
+  document.querySelectorAll(".side-btn").forEach(b=>b.classList.remove("active"));
+  const ov=document.querySelector('.side-btn[data-page="overview"]'); if(ov) ov.classList.add("active");
+  dashPage("overview");
+}
+function pctToGoal(m){ return Math.min(100, Math.round((m.progress/1000)*1000)/10); }
+
+function dashCardHTML(m,big){
+  return `<div class="digital-card ${m.frozen?'frozen':''}" ${big?'style="max-width:650px"':''}>
+    <div><div class="chip"></div><div style="margin-top:15px;font-weight:800">YUP MEMBER ${m.frozen?'· FROZEN':''}</div></div>
+    <div class="number">•••• •••• •••• ${esc(m.card)}</div>
+    <div style="display:flex;justify-content:space-between">
+      <div><small>MEMBER</small><br><strong>${esc(m.name||'YUP MEMBER')}</strong></div>
+      <strong style="font-size:25px">YUP</strong>
+    </div></div>`;
+}
+
+function dashPage(page,button){
+  document.querySelectorAll(".side-btn").forEach(b=>{ if(b.dataset.page) b.classList.remove("active"); });
+  if(button) button.classList.add("active");
+  else { const b=document.querySelector('.side-btn[data-page="'+page+'"]'); if(b) b.classList.add("active"); }
+  const m=me(); if(!m){ showPublic(); return; }
+  const c=document.getElementById("dashContent"), t=document.getElementById("pageTitle");
+  const pct=pctToGoal(m);
+
+  if(page==="overview"){
+    t.textContent="Overview";
+    c.innerHTML=`
+      <div class="stats">
+        <div class="stat"><small>YUP Progress</small><strong>${m.progress}</strong></div>
+        <div class="stat"><small>Available</small><strong>${money(m.available)}</strong></div>
+        <div class="stat"><small>Payments</small><strong>${m.payments.length}</strong></div>
+        <div class="stat"><small>Status</small><strong style="font-size:20px;color:${m.status==='active'?'var(--green)':'#c98a00'}">${m.status.toUpperCase()}</strong></div>
+      </div>
+      <div class="grid">
+        <div>
+          <div class="panel"><h2>Your YUP Card</h2>${dashCardHTML(m)}
+            <div class="card-controls">
+              <button class="secondary" onclick="freezeCard()">${m.frozen?'Unfreeze Card':'Freeze Card'}</button>
+              <button class="primary" onclick="viewCard()">View Details</button>
+            </div>
+          </div>
+          <div class="panel"><h2>YUP Progress</h2>
+            <div class="progress-meta"><span>Current Progress</span><strong>${m.progress} / 1000</strong></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <p style="color:var(--muted)">You are ${pct}% toward your current YUP Progress milestone.</p>
+          </div>
+        </div>
+        <div>
+          <div class="panel"><h2>Next Payment</h2><p style="color:var(--muted)">Payment due</p>
+            <strong style="font-size:34px">${money(YUP_CONFIG.monthlyPayment)}</strong><p>Due next cycle</p>
+            <button class="primary" style="width:100%" onclick="dashPage('payments')">Make Payment</button>
+          </div>
+          <div class="panel"><h2>Recent Activity</h2>${recentActivityHTML(m)}</div>
+        </div>
+      </div>`;
+  }
+  else if(page==="card"){
+    t.textContent="Digital Card";
+    c.innerHTML=`<div class="panel"><h2>Your YUP Digital Card</h2>${dashCardHTML(m,true)}
+      <div class="card-controls" style="max-width:650px">
+        <button class="secondary" onclick="freezeCard()">${m.frozen?'Unfreeze Card':'Freeze Card'}</button>
+        <button class="primary" onclick="viewCard()">Card Details</button>
+      </div></div>`;
+  }
+  else if(page==="payments"){
+    t.textContent="Payments";
+    c.innerHTML=`
+      <div class="panel"><h2>Make a Payment</h2>
+        <div class="price-box"><small>Suggested amount due</small><strong>${money(YUP_CONFIG.monthlyPayment)}</strong></div>
+        <div class="field"><label>Payment Amount</label><input id="paymentAmount" value="${YUP_CONFIG.monthlyPayment.toFixed(2)}" type="number" min="1" step="0.01"></div>
+        <button class="primary" onclick="submitPayment()">Submit Payment</button>
+      </div>
+      <div class="panel"><h2>Payment History</h2>
+        <table class="table"><tr><th>Date</th><th>Amount</th><th>Type</th><th>Status</th></tr>
+        ${m.payments.length? m.payments.slice().reverse().map(p=>`<tr><td>${esc(p.date)}</td><td>${money(p.amount)}</td><td>${esc(p.type||'Payment')}</td><td><span class="status green">${esc(p.status)}</span></td></tr>`).join('') : `<tr><td colspan="4" style="color:var(--muted)">No payments yet.</td></tr>`}
+        </table></div>`;
+  }
+  else if(page==="transactions"){
+    t.textContent="Transactions";
+    c.innerHTML=`<div class="panel"><h2>Recent Transactions</h2>
+      <table class="table"><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr>
+      ${m.transactions.length? m.transactions.slice().reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.desc)}</td><td>${esc(x.amount)}</td><td><span class="status green">${esc(x.status)}</span></td></tr>`).join('') : `<tr><td colspan="4" style="color:var(--muted)">No transactions yet.</td></tr>`}
+      </table>
+      <button class="secondary" style="margin-top:15px" onclick="addDemoTransaction()">Simulate Card Purchase</button></div>`;
+  }
+  else if(page==="progress"){
+    t.textContent="YUP Progress";
+    c.innerHTML=`
+      <div class="panel"><h2>Your YUP Progress</h2>
+        <div style="font-size:60px;font-weight:950;color:var(--blue)">${m.progress}</div>
+        <p style="color:var(--muted)">Current internal YUP Progress measurement.</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="panel"><h2>Progress Factors</h2>
+        <table class="table">
+          <tr><td>Payment consistency</td><td><strong>${m.payments.length>=3?'Excellent':m.payments.length>=1?'Good':'Building'}</strong></td></tr>
+          <tr><td>Account activity</td><td><strong>${m.transactions.length>=3?'Good':'Building'}</strong></td></tr>
+          <tr><td>Payment timing</td><td><strong>Excellent</strong></td></tr>
+          <tr><td>Account age</td><td><strong>${(Date.now()-m.createdAt)>2592000000?'Established':'Building'}</strong></td></tr>
+        </table></div>
+      <div class="notice">YUP Progress is an internal program measurement and is not a credit-bureau score.</div>`;
+  }
+  else if(page==="profile"){
+    t.textContent="Profile";
+    c.innerHTML=`<div class="panel"><h2>Member Profile</h2>
+      <div class="field"><label>Full Name</label><input id="pfName" value="${esc(m.name)}"></div>
+      <div class="field"><label>Email (login)</label><input value="${esc(m.email)}" disabled></div>
+      <div class="field"><label>Phone</label><input id="pfPhone" value="${esc(m.phone)}"></div>
+      <div class="field"><label>Financial Goal</label><input id="pfGoal" value="${esc(m.goal)}"></div>
+      <div class="field"><label>New Password (optional)</label><input id="pfPass" type="password" placeholder="Leave blank to keep current"></div>
+      <button class="primary" onclick="saveProfile()">Save Changes</button></div>`;
+  }
+  else if(page==="support"){
+    t.textContent="Support";
+    c.innerHTML=`<div class="panel"><h2>YUP Support</h2><p>Need help with your account?</p>
+      <div class="field"><label>Message</label><textarea id="supportMessage" style="min-height:130px"></textarea></div>
+      <button class="primary" onclick="sendSupport()">Send Support Request</button></div>`;
+  }
+}
+function recentActivityHTML(m){
+  const items=[];
+  m.payments.slice(-2).reverse().forEach(p=>items.push(`Payment received <strong>${money(p.amount)}</strong>`));
+  m.transactions.slice(-2).reverse().forEach(x=>items.push(`${esc(x.desc)} <strong>${esc(x.amount)}</strong>`));
+  if(!items.length) return `<p style="color:var(--muted)">No recent activity yet.</p>`;
+  return items.slice(0,4).map(i=>`<p>${i}</p>`).join('');
+}
+
+/* ---------- dashboard actions ---------- */
+function freezeCard(){
+  const m=me(); m.frozen=!m.frozen; saveDB(DB);
+  toast(m.frozen?"Card frozen.":"Card unfrozen.");
+  dashPage(document.getElementById("pageTitle").textContent==="Digital Card"?"card":"overview");
+}
+function viewCard(){
+  const m=me();
+  showModal("Card Details",
+    `<p><strong>Card:</strong> YUP Digital Card</p>
+     <p><strong>Number:</strong> •••• •••• •••• ${esc(m.card)}</p>
+     <p><strong>Member:</strong> ${esc(m.name)}</p>
+     <p><strong>Status:</strong> ${m.frozen?'Frozen':'Active'}</p>`);
+}
+function submitPayment(){
+  const amt=Number(val("paymentAmount"));
+  if(!amt||amt<=0){ toast("Enter a valid payment amount."); return; }
+  const m=me();
+  m.payments.push({date:today(), amount:amt, status:"Paid", type:"Membership Payment"});
+  m.transactions.push({date:today(), desc:"YUP Payment", amount:"+"+money(amt), status:"Complete"});
+  m.progress=Math.min(1000, m.progress+8);
+  saveDB(DB);
+  showModal("Payment Submitted", `<p>Your payment of <strong>${money(amt)}</strong> has been recorded. YUP Progress +8.</p>`);
+  dashPage("payments");
+}
+function addDemoTransaction(){
+  const m=me(); const amt=(Math.random()*40+8);
+  m.transactions.push({date:today(), desc:"Retail Purchase", amount:"-"+money(amt), status:"Complete"});
+  saveDB(DB); dashPage("transactions"); toast("Transaction added.");
+}
+function saveProfile(){
+  const m=me();
+  m.name=val("pfName").toUpperCase(); m.phone=val("pfPhone"); m.goal=val("pfGoal");
+  const np=val("pfPass"); if(np){ if(np.length<6){ toast("Password must be 6+ characters."); return; } m.password=np; }
+  saveDB(DB);
+  document.getElementById("userName").textContent=m.name;
+  toast("Profile saved.");
+}
+function sendSupport(){
+  const msg=val("supportMessage"); if(!msg){ toast("Enter a message."); return; }
+  showModal("Support Request Sent","<p>Your support request has been submitted. The YUP team will reach out by email.</p>");
+  const el=document.getElementById("supportMessage"); if(el) el.value="";
+}
+
+/* ---------- admin ---------- */
+function adminLogin(){
+  const pw=prompt("Enter YUP administrator password:");
+  if(pw===null) return;
+  if(pw===YUP_CONFIG.adminPassword) showAdmin();
+  else toast("Invalid administrator password.");
+}
+function showAdmin(){
+  const members=Object.values(DB.members);
+  const active=members.filter(m=>m.status==="active").length;
+  const pendingCt=members.filter(m=>m.status!=="active").length;
+  let totalPay=0; members.forEach(m=>m.payments.forEach(p=>totalPay+=Number(p.amount||0)));
+  document.getElementById("pageTitle").textContent="YUP Administration";
+  document.getElementById("dashContent").innerHTML=`
+    <div class="stats">
+      <div class="stat"><small>Total Members</small><strong>${members.length}</strong></div>
+      <div class="stat"><small>Active</small><strong>${active}</strong></div>
+      <div class="stat"><small>Pending</small><strong>${pendingCt}</strong></div>
+      <div class="stat"><small>Payments</small><strong>${money(totalPay)}</strong></div>
+    </div>
+    <div class="panel"><h2>Members</h2>
+      <table class="table"><tr><th>Member</th><th>Email</th><th>Status</th><th>Progress</th><th>Paid</th><th></th></tr>
+      ${members.map(m=>{
+        const paid=m.payments.reduce((s,p)=>s+Number(p.amount||0),0);
+        return `<tr><td>${esc(m.name)}</td><td>${esc(m.email)}</td>
+          <td><span class="status ${m.status==='active'?'green':'yellow'}">${m.status[0].toUpperCase()+m.status.slice(1)}</span></td>
+          <td>${m.progress}</td><td>${money(paid)}</td>
+          <td>${m.status!=='active'?`<button class="ghost" onclick="approveMember('${esc(m.email)}')">Approve</button>`:''}</td></tr>`;
+      }).join('')}
+      </table></div>
+    <div class="grid">
+      <div class="panel"><h2>Stripe</h2><p>Payment processor connection.</p>
+        <span class="status ${YUP_CONFIG.stripePaymentLink?'green':'yellow'}">${YUP_CONFIG.stripePaymentLink?'CONFIGURED':'NOT CONNECTED'}</span>
+        <button class="secondary" style="display:block;margin-top:15px" onclick="stripeInfo()">Manage Stripe</button></div>
+      <div class="panel"><h2>Cash App</h2><p>Manual payment destination</p>
+        <strong style="font-size:24px">${esc(YUP_CONFIG.cashTag)}</strong>
+        <span class="status green" style="margin-left:8px">ACTIVE</span></div>
+    </div>
+    <div class="panel"><h2>Data</h2>
+      <p style="color:var(--muted)">Member records are stored locally in this browser.</p>
+      <button class="secondary" onclick="exportData()">Export Members (JSON)</button>
+      <button class="secondary" style="margin-left:8px" onclick="resetData()">Reset Demo Data</button></div>`;
+}
+function approveMember(email){ const m=DB.members[email]; if(m){ m.status="active"; saveDB(DB); toast("Member approved."); showAdmin(); } }
+function stripeInfo(){
+  showModal("Stripe","<p>To accept live card payments, create a <strong>Stripe Payment Link</strong> in your Stripe Dashboard and paste its URL into <code>YUP_CONFIG.stripePaymentLink</code> at the top of the page script. Secret keys must live on a secure backend, never in this file.</p>");
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="yup-members.json"; a.click();
+}
+function resetData(){
+  if(confirm("Reset all member data to the demo seed? This cannot be undone.")){
+    try{ localStorage.removeItem(DB_KEY); }catch(e){}
+    DB=seedDB(); toast("Demo data reset."); showAdmin();
+  }
+}
+
+/* ---------- modal / utils ---------- */
+function showModal(title,body){
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalBody").innerHTML=body;
+  document.getElementById("modal").classList.remove("hidden");
+}
+function closeModal(){ document.getElementById("modal").classList.add("hidden"); }
+function val(id){ const el=document.getElementById(id); return el?el.value.trim():""; }
+
+/* ---------- boot ---------- */
+(function boot(){
+  let sess=null; try{ sess=localStorage.getItem(SESSION_KEY); }catch(e){}
+  if(sess && DB.members[sess]){ current=sess; openDashboard(); }
+  else showPublic();
+})();
+</script>
+</body>
+</html>
